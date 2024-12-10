@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HackathonList, ParticipantList, ChallengeList, TeamList, SubmissionList
+from .views import HackathonList, ParticipantList, ChallengeList, TeamList, SubmissionList, UserList
 
 urlpatterns = [
     path('hackathons/', HackathonList.as_view(), name='hackathon-list'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('challenges/', ChallengeList.as_view(), name='challenge-list'),
     path('teams/', TeamList.as_view(), name='team-list'),
     path('submissions/', SubmissionList.as_view(), name='submission-list'),
+        path('users/', UserList.as_view(), name='user-list'),
 ]

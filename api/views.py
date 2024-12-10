@@ -1,6 +1,8 @@
 from rest_framework import generics
 from .models import Hackathon, Participant, Challenge, Team, Submission
 from .serializers import HackathonSerializer, ParticipantSerializer, ChallengeSerializer, TeamSerializer, SubmissionSerializer
+from django.contrib.auth.models import User
+from .serializers import UserSerializer
 
 class HackathonList(generics.ListCreateAPIView):
     queryset = Hackathon.objects.all()
@@ -26,3 +28,7 @@ from django.http import HttpResponse
 
 def home(request):
     return HttpResponse("Welcome to the Home Page")
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
