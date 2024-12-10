@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os  # Ajouté pour gérer les variables d'environnement
 
+from datetime import timedelta  # Ajouté pour la configuration des tokens
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     # Ajout des bibliothèques nécessaires
     'corsheaders',  # Pour gérer les CORS
     'rest_framework',  # Pour l'API REST
+    'rest_framework.authtoken',  # Ajoute cette ligne pour les tokens d'authentification
     'api.apps.ApiConfig',  # Pour l'application API
 ]
 
@@ -79,8 +82,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'Mysql',
+        'USER': 'root',         # Votre utilisateur MySQL (par défaut : root)
+        'PASSWORD': 'root', # Le mot de passe associé à cet utilisateur
+        'HOST': '127.0.0.1',    # L'adresse de votre serveur MySQL (localhost)
+        'PORT': '3306',         # Le port MySQL (3306 par défaut)
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  # Option pour éviter certains problèmes
+        }
     }
 }
 
@@ -133,6 +144,22 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # URL de votre frontend Vue.js
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Token d'accès expire après 15 minutes
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Token de rafraîchissement expire après 7 jours
+    'ROTATE_REFRESH_TOKENS': False,                   # Pas de rotation des refresh tokens
+    'BLACKLIST_AFTER_ROTATION': False,                # Pas de blacklisting après rotation des refresh tokens
+    'ALGORITHM': 'HS256',                             # Utilisation de l'algorithme HMAC-SHA256
+}
 # Variables supplémentaires pour la production (facultatif)
 # if not DEBUG:
 #     ALLOWED_HOSTS = ['votre-domaine.com']  # Remplacez par votre domaine
