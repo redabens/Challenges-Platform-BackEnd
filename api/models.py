@@ -7,7 +7,6 @@ class Hackathon(models.Model):
     description = models.TextField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
@@ -23,7 +22,6 @@ class Participant(models.Model):
 
 # Challenge Model
 class Challenge(models.Model):
-    hackathon = models.ForeignKey(Hackathon, on_delete=models.CASCADE, related_name='challenges')
     title = models.CharField(max_length=200)
     description = models.TextField()
     pdf = models.FileField(upload_to='challenges/')
@@ -36,7 +34,6 @@ class Challenge(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=100)
     members = models.ManyToManyField(Participant, related_name='teams')
-    hackathon = models.ForeignKey(Hackathon, on_delete=models.CASCADE, related_name='teams')
 
     def __str__(self):
         return self.name

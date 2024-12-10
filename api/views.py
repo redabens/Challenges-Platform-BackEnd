@@ -4,7 +4,7 @@ from .serializers import HackathonSerializer, ParticipantSerializer, ChallengeSe
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
 
-class HackathonList(generics.ListCreateAPIView):
+class Hackathon(generics.ListCreateAPIView):
     queryset = Hackathon.objects.all()
     serializer_class = HackathonSerializer
 
