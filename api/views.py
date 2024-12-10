@@ -21,3 +21,8 @@ class TeamList(generics.ListCreateAPIView):
 class SubmissionList(generics.ListCreateAPIView):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
+
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Welcome to the Home Page")
