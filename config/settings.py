@@ -36,8 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api', # Ajout de l'application API
-    
     # Ajout des bibliothèques nécessaires
     'corsheaders',  # Pour gérer les CORS
     'rest_framework',  # Pour l'API REST
