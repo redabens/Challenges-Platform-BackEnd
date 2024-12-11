@@ -72,7 +72,7 @@ class HackatonSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("La date de début ne peut pas être après la date de fin.")
             return data
 
-class TeamSerializer(serializers.ModelSerializer):
+class TeamCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Team
         fields = ['id', 'name', 'code', 'hackaton', 'participants', 'full']
@@ -89,7 +89,17 @@ class TeamSerializer(serializers.ModelSerializer):
         # Ajouter le participant à la team
         team.participants.add(participant)  # Ajouter l'utilisateur actuel à la team
         
+        # Vérifier si la team est pleine
+        if team.participants.count() >= team.hackaton.teamLimit:
+            team.full = True
+            team.save()
         return team
+    
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Team
+        fields = ['id', 'name', 'code', 'hackaton', 'participants', 'full']
+        read_only_fields = ['id', 'code']
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
