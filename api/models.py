@@ -8,11 +8,11 @@ class Participant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='participant', null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=200)
+    email = models.EmailField(max_length=200, unique=True)
     phone = models.CharField(max_length=10)
     birthdate = models.DateField()
-    Nss = models.CharField(max_length=12)
-    University = models.CharField(max_length=200)
+    nss = models.CharField(max_length=12)
+    university = models.CharField(max_length=200)
     password = models.CharField(max_length=255)  # Ajouter un champ de mot de passe
 
     def __str__(self):
@@ -25,6 +25,7 @@ class Hackaton(models.Model):
     end_date = models.DateField()
     teamLimit = models.IntegerField()
     is_available = models.BooleanField(default=False)
+    # challenges = models.ManyToManyField('Document', related_name='hackatons', blank=True)
 
     def __str__(self):
         return self.name
@@ -34,7 +35,6 @@ class Team(models.Model):
     code = models.CharField(max_length=6, unique=True, editable=False)  # Code unique et non modifiable
     hackaton = models.ForeignKey(Hackaton, on_delete=models.CASCADE, related_name='teams')
     participants = models.ManyToManyField(Participant, related_name='teams', blank=True)
-    full = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # Générer un code aléatoire si le champ est vide
@@ -52,10 +52,29 @@ class Team(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.code})"
+    
+    @property
+    def full(self):
+        return self.participants.count() >= self.hackaton.teamLimit
 
-class Document(models.Model):
+    
+class Challenge(models.Model):
     title = models.CharField(max_length=100)
-    pdf = models.BinaryField()  # Pour stocker le fichier PDF sous forme binaire
+    description = models.TextField()
+    file = models.FileField(upload_to='challenges/')  # Les fichiers seront stockés dans le dossier "challenges/" sur Cloudinary
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+    
+class Submission(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='submissions')
+    Hackaton = models.ForeignKey(Hackaton, on_delete=models.CASCADE, related_name='submissions')
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name='submissions')
+    submission_date = models.DateTimeField(auto_now_add=True)
+    githubLink = models.URLField()
+    driveLink = models.URLField()
+    figmaLink = models.URLField()
+
+    def __str__(self):
+        return f"{self.team} - {self.Hackaton} - {self.challenge}"

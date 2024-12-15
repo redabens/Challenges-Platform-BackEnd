@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',  # Pour l'API REST
     'rest_framework.authtoken',  # Ajoute cette ligne pour les tokens d'authentification
     'api.apps.ApiConfig',  # Pour l'application API
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +132,20 @@ USE_TZ = True
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = [BASE_DIR / 'static']  # Ajout pour servir les fichiers statiques
 # STATIC_ROOT = BASE_DIR / 'staticfiles'   # Emplacement pour collectstatic en production
+
+# Configuration Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dxub83eaj',
+    'API_KEY': '513221626775168',
+    'API_SECRET': 'etH3VAUGn73WFD2r8msCDe3BIQA',
+}
+
+# Utiliser Cloudinary pour stocker les fichiers médias
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# URL publique pour accéder aux fichiers médias
+MEDIA_URL = 'https://res.cloudinary.com/dxub83eaj/'
+
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / 'media'  # Emplacement pour les fichiers médias

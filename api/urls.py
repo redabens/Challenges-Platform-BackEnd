@@ -14,6 +14,9 @@ urlpatterns = [
     path('team/<int:id>/', views.TeamDetailView.as_view(), name='team_detail'),
     path('remove_participant_team/<int:id>/', views.RemoveParticipantTeamView.as_view(), name='remove_participant_team'),
     #hackaton
-    path('create_hackaton/', views.HackatonCreateView.as_view(), name='create_hackaton'),
-    path('hackatons/', views.HackatonListView.as_view(), name='list_hackatons'),
+    path('hackaton/', views.HackatonListCreateView.as_view(), name='create_hackaton'),
+    # URL pour lister les challenges et en créer un (GET et POST)
+    path('challenges/', views.ChallengeListCreateView.as_view(), name='challenge-list-create'),
+    # URL pour récupérer un challenge spécifique par son 'id'
+    path('challenges/<int:id>/', views.ChallengeDetailView.as_view(), name='challenge-detail'),
 ]
