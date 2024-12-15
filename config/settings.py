@@ -134,14 +134,18 @@ STATIC_URL = 'static/'
 # STATIC_ROOT = BASE_DIR / 'staticfiles'   # Emplacement pour collectstatic en production
 
 # Configuration Cloudinary
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dxub83eaj',
-    'API_KEY': '513221626775168',
-    'API_SECRET': 'etH3VAUGn73WFD2r8msCDe3BIQA',
-}
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+    cloud_name='dxub83eaj',  # Remplacez par votre cloud_name
+    api_key='513221626775168',        # Remplacez par votre api_key
+    api_secret='etH3VAUGn73WFD2r8msCDe3BIQA'   # Remplacez par votre api_secret
+)
 
 # Utiliser Cloudinary pour stocker les fichiers médias
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary.storage.MediaCloudinaryStorage'
 
 # URL publique pour accéder aux fichiers médias
 MEDIA_URL = 'https://res.cloudinary.com/dxub83eaj/'

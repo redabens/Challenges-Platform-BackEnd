@@ -264,11 +264,24 @@ class ChallengeListCreateView(generics.ListCreateAPIView):
 
 class ChallengeDetailView(generics.RetrieveAPIView):
     """
-    Affiche les détails d'un challenge spécifique.
+    Vue pour afficher les détails d'un challenge spécifique et fournir un lien de téléchargement.
     """
-    queryset = models.Challenge.objects.all()
-    serializer_class = serializers.ChallengeSerializer
-    lookup_field = 'id'  # Utilise 'id' comme clé de recherche dans l'URL
+    queryset = models.Challenge.objects.all()  # Récupérer les challenges
+    serializer_class = serializers.ChallengeSerializer  # Utiliser le sérialiseur pour retourner les données du challenge
+    lookup_field = 'id'  # Utiliser 'id' comme clé de recherche dans l'URL
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Récupère un challenge spécifique et retourne l'URL du fichier pour le téléchargement.
+        """
+        challenge = self.get_object()  # Récupérer l'objet challenge en fonction de l'id
+        serializer = self.get_serializer(challenge)  # Sérialiser l'objet challenge
+        response_data = serializer.data
+
+        # Ajouter le lien de téléchargement du fichier à la réponse
+        response_data['file_download_url'] = challenge.file.url if challenge.file else None
+
+        return Response(response_data)
 # logout
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]

@@ -80,4 +80,4 @@ class TeamSerializer(serializers.ModelSerializer):
 class ChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Challenge
-        fields = ['id', 'title', 'description', 'file', 'created_at']  # Inclut tous les champs nécessaires
+        fields = ['id', 'title', 'description', 'file', 'hackaton', 'created_at']  # Inclut tous les champs nécessaires

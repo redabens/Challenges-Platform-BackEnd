@@ -2,6 +2,7 @@ import random
 import string
 from django.db import models
 from django.contrib.auth.models import User  # Utilise le modèle User de Django
+from cloudinary.models import CloudinaryField  # Importer CloudinaryField pour stocker les fichiers sur Cloudinary
 
 # Create your models here.
 class Participant(models.Model):
@@ -61,7 +62,8 @@ class Team(models.Model):
 class Challenge(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    file = models.FileField(upload_to='challenges/')  # Les fichiers seront stockés dans le dossier "challenges/" sur Cloudinary
+    file = CloudinaryField('file', folder='challenges')  # Les fichiers seront stockés dans le dossier "challenges/" sur Cloudinary
+    hackaton = models.ForeignKey(Hackaton, on_delete=models.CASCADE, related_name='Challenges')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -69,7 +71,6 @@ class Challenge(models.Model):
     
 class Submission(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='submissions')
-    Hackaton = models.ForeignKey(Hackaton, on_delete=models.CASCADE, related_name='submissions')
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name='submissions')
     submission_date = models.DateTimeField(auto_now_add=True)
     githubLink = models.URLField()
@@ -77,4 +78,4 @@ class Submission(models.Model):
     figmaLink = models.URLField()
 
     def __str__(self):
-        return f"{self.team} - {self.Hackaton} - {self.challenge}"
+        return f"{self.team} - {self.challenge}"
